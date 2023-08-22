@@ -1,5 +1,5 @@
+import 'package:bloc_base_source/helper/logger/logger.dart';
 import 'package:dio/dio.dart';
-import 'package:fimber/fimber.dart';
 
 import '../../core/common/error_type.dart';
 import '../../core/common/result.dart';
@@ -14,14 +14,14 @@ abstract class BaseRepository {
     try {
       final response = await callDb;
       if (response != null) {
-        Fimber.d("DB success message -> $response");
+        AppLog.d("DB success message -> $response");
         return Success(mapperDb.call(response)!);
       } else {
-        Fimber.d("DB response is null");
+        AppLog.d("DB response is null");
         return Error(ErrorType.GENERIC, "DB response is null!");
       }
     } catch (exception) {
-      Fimber.d("DB failure message -> $exception");
+      AppLog.d("DB failure message -> $exception");
       return Error(ErrorType.GENERIC, "Unknown DB error");
     }
   }
@@ -30,7 +30,7 @@ abstract class BaseRepository {
     Future<ModelBaseResponse<Data>> call, {
     SaveResult<Data>? saveResult,
   }) async {
-    Fimber.d("safeApiCall");
+    AppLog.d("safeApiCall");
     try {
       var response = await call;
       if (response.isSuccess()) {
@@ -39,11 +39,13 @@ abstract class BaseRepository {
       } else if (response.isTokenExpired()) {
         return Error(ErrorType.TOKEN_EXPIRED, response.message ?? "Unknown Error");
       } else {
-        Fimber.e("response.message -> ${response.message}");
-        return Error(ErrorType.GENERIC, response.message ?? "Unknown Error");
+        // AppLog.e("response.message -> ${response.message}");
+        // return Error(ErrorType.GENERIC, response.message ?? "Unknown Error");
+        await saveResult?.call(response.data);
+        return Success(response.data);
       }
     } on Exception catch (exception) {
-      Fimber.e("Api error message -> ${exception.toString()}");
+      AppLog.e("Api error message -> ${exception.toString()}");
       if (exception is DioError) {
         switch (exception.type) {
           case DioErrorType.connectTimeout:

@@ -12,28 +12,31 @@ class _LoginService implements LoginService {
   _LoginService(
     this._dio, {
     this.baseUrl,
-  });
+  }) {
+    baseUrl ??= 'https://sso.vtsmas.vn/';
+  }
 
   final Dio _dio;
 
   String? baseUrl;
 
   @override
-  Future<ModelBaseResponse<LoginResponse>> performLogin(model) async {
+  Future<ModelBaseResponse<LoginResponse>> performLogin(loginRequest) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
-    _data.addAll(model.toJson());
+    _data.addAll(loginRequest);
     final _result = await _dio.fetch<Map<String, dynamic>>(
         _setStreamType<ModelBaseResponse<LoginResponse>>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
+      contentType: 'application/x-www-form-urlencoded',
     )
             .compose(
               _dio.options,
-              '/authenticate/1.0',
+              'connect/token',
               queryParameters: queryParameters,
               data: _data,
             )

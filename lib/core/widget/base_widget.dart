@@ -31,6 +31,7 @@ abstract class BaseView<B extends BaseBloc> extends StatelessWidget {
                 ],
               ));
         } else if (state is ErrorDialogState) {
+          print(state.message);
           showDialogView(
               context: context,
               content: Row(

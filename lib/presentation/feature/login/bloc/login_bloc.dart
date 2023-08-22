@@ -1,3 +1,4 @@
+import 'package:bloc_base_source/helper/logger/logger.dart';
 import 'package:bloc_base_source/presentation/routers/app_router.dart';
 import 'package:fimber/fimber.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,9 +29,16 @@ class LoginBloc extends BaseBloc {
       await safeDataCall(
         emit,
         callToHost:
-            _loginRepository.performLogin(LoginRequest("0987654321", "123456")),
+            _loginRepository.performLogin({
+              "grant_type": "password",
+              "username": "hcm_thcs_viettel9",
+              "password": "Abc@123456",
+              "scope": "openid profile IdentityService TenantService InternalGateway BackendAdminAppGateway EmployeeService CategoryService SmasCustomerService AdminSettingService SettingService ClassroomSupervisorService StudentService ScoreBookService MongoDynamicPageService",
+              "client_id": "backend-admin-app-client",
+              "client_secret": "1q2w3e*"
+            }),
         success: (Emitter<BaseState> emit, LoginResponse? data) {
-          Fimber.e("login success data - ${data?.token}");
+          AppLog.d("login success data - ${data?.token}");
           hideDialogState();
           token = data?.token ?? "";
           navigationService.pushAndRemoveUntil(

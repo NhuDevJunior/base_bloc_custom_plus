@@ -1,5 +1,6 @@
 import 'package:bloc_base_source/core/bloc/event.dart';
 import 'package:bloc_base_source/core/common/error_type.dart';
+import 'package:bloc_base_source/helper/logger/logger.dart';
 import 'package:fimber/fimber.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -61,23 +62,29 @@ abstract class BaseBloc extends Bloc<BaseEvent, BaseState> {
 
     // call data from host.
     if (callToHost != null) {
-      Fimber.d("start call host");
+      AppLog.d("start call host $callToHost");
       (await callToHost).when(success: (data) async {
+        AppLog.d("success call api data = $data");
         if (success == null) {
+          AppLog.d("null success");
           hideDialogState();
           emit(SuccessState(data));
         } else {
+          AppLog.d("success");
           success.call(emit, data);
         }
       }, error: (type, message) async {
+        AppLog.d("error call api");
         if (error == null) {
           hideDialogState();
         }
         if (type == ErrorType.TOKEN_EXPIRED) {
+          AppLog.d("error token expired api");
           error != null
               ? error.call(emit, message)
               : emit(ErrorDialogState(message: message));
         } else {
+          AppLog.d("error other case");
           error != null
               ? error.call(emit, message)
               : emit(ErrorDialogState(message: message));

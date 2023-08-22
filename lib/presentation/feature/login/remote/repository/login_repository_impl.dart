@@ -14,7 +14,7 @@ class LoginRepositoryImpl extends BaseRepository implements LoginRepository {
   LoginRepositoryImpl(this._loginService);
 
   @override
-  Future<Result<LoginResponse>> performLogin(LoginRequest model) {
+  Future<Result<LoginResponse>> performLogin(Map<String, String> model) {
     return safeApiCall(_loginService.performLogin(model));
   }
 }

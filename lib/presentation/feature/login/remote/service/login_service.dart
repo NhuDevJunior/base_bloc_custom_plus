@@ -8,10 +8,10 @@ import '../../models/login_response.dart';
 
 part 'login_service.g.dart';
 
-@RestApi()
+@RestApi(baseUrl: "https://sso.vtsmas.vn/")
 abstract class LoginService {
   factory LoginService(Dio dio) = _LoginService;
-
-  @POST('/authenticate/' + ServiceConstants.version)
-  Future<ModelBaseResponse<LoginResponse>> performLogin(@Body() LoginRequest model);
+  @FormUrlEncoded()
+  @POST('connect/token')
+  Future<ModelBaseResponse<LoginResponse>> performLogin(@Body() Map<String, String> loginRequest);
 }
