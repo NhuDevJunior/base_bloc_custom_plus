@@ -38,9 +38,9 @@ class LoginBloc extends BaseBloc {
               "client_secret": "1q2w3e*"
             }),
         success: (Emitter<BaseState> emit, LoginResponse? data) {
-          AppLog.d("login success data - ${data?.token}");
+          AppLog.d("login success data - ${data?.token_type}");
           hideDialogState();
-          token = data?.token ?? "";
+          token = data?.token_type ?? "";
           navigationService.pushAndRemoveUntil(
             const HomeRoute(),
             predicate: (route) => false,

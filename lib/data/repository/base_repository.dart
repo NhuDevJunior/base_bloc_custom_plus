@@ -41,8 +41,50 @@ abstract class BaseRepository {
       } else {
         // AppLog.e("response.message -> ${response.message}");
         // return Error(ErrorType.GENERIC, response.message ?? "Unknown Error");
+        AppLog.e("response.message -> ${response}");
         await saveResult?.call(response.data);
         return Success(response.data);
+      }
+    } on Exception catch (exception) {
+      AppLog.e("Api error message -> ${exception.toString()}");
+      if (exception is DioError) {
+        switch (exception.type) {
+          case DioErrorType.connectTimeout:
+          case DioErrorType.sendTimeout:
+          case DioErrorType.receiveTimeout:
+          case DioErrorType.cancel:
+            return Error(ErrorType.POOR_NETWORK, exception.message);
+          case DioErrorType.other:
+            return Error(ErrorType.NO_NETWORK, exception.message);
+
+          case DioErrorType.response:
+            return Error(ErrorType.GENERIC, exception.message);
+        }
+      }
+      return Error(ErrorType.GENERIC, "Unknown API error");
+    }
+  }
+
+  Future<Result<Data>> safeApiCallNoBase<Data>(
+      Future<Data> call, {
+        SaveResult<Data>? saveResult,
+      }) async {
+    AppLog.d("safeApiCall");
+    try {
+      var response = await call;
+      if (response!=null) {
+        await saveResult?.call(response);
+        return Success(response);
+      }
+      // else if (response.isTokenExpired()) {
+      //   return Error(ErrorType.TOKEN_EXPIRED, response.message ?? "Unknown Error");
+      // }
+      else {
+        AppLog.e("response.message -> ${response}");
+        return Error(ErrorType.GENERIC, response!=null ? "Unknown Error":"");
+        AppLog.e("response.message -> ${response}");
+        // await saveResult?.call(response.data);
+        // return Success(response.data);
       }
     } on Exception catch (exception) {
       AppLog.e("Api error message -> ${exception.toString()}");

@@ -8,10 +8,13 @@ import '../../models/login_response.dart';
 
 part 'login_service.g.dart';
 
-@RestApi(baseUrl: "https://sso.vtsmas.vn/")
+@RestApi(baseUrl: "https://preview-sso.vtsmas.vn/")
 abstract class LoginService {
   factory LoginService(Dio dio) = _LoginService;
+  // @FormUrlEncoded()
+  // @POST('connect/token')
+  // Future<ModelBaseResponse<LoginResponse>> performLogin(@Body() Map<String, String> loginRequest);
   @FormUrlEncoded()
   @POST('connect/token')
-  Future<ModelBaseResponse<LoginResponse>> performLogin(@Body() Map<String, String> loginRequest);
+  Future<LoginResponse> performLogin(@Body() Map<String, String> loginRequest);
 }

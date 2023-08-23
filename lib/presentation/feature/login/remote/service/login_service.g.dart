@@ -13,7 +13,7 @@ class _LoginService implements LoginService {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'https://sso.vtsmas.vn/';
+    baseUrl ??= 'https://preview-sso.vtsmas.vn/';
   }
 
   final Dio _dio;
@@ -21,14 +21,14 @@ class _LoginService implements LoginService {
   String? baseUrl;
 
   @override
-  Future<ModelBaseResponse<LoginResponse>> performLogin(loginRequest) async {
+  Future<LoginResponse> performLogin(loginRequest) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(loginRequest);
-    final _result = await _dio.fetch<Map<String, dynamic>>(
-        _setStreamType<ModelBaseResponse<LoginResponse>>(Options(
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<LoginResponse>(Options(
       method: 'POST',
       headers: _headers,
       extra: _extra,
@@ -41,10 +41,7 @@ class _LoginService implements LoginService {
               data: _data,
             )
             .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = ModelBaseResponse<LoginResponse>.fromJson(
-      _result.data!,
-      (json) => LoginResponse.fromJson(json as Map<String, dynamic>),
-    );
+    final value = LoginResponse.fromJson(_result.data!);
     return value;
   }
 

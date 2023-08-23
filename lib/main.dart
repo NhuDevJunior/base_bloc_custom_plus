@@ -16,22 +16,14 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AppRouter _appRouter = locator<AppRouter>();
-    return MaterialApp(
+    return MaterialApp.router(
         title: 'Flutter Clean Architecture Sample',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        // routerDelegate: _appRouter.delegate(),
-        // routeInformationParser: _appRouter.defaultRouteParser(),
-        initialRoute:"/login_screen",
-        routes: {
-          // When navigating to the "/" route, build the FirstScreen widget.
-          '/login_screen': (context) => const LoginScreen(),
-          // When navigating to the "/second" route, build the SecondScreen widget.
-          '/home_screen': (context) => const HomeScreen(),
-        },
-    );
+        routerDelegate: _appRouter.delegate(),
+        routeInformationParser: _appRouter.defaultRouteParser());
   }
-}
+  }
