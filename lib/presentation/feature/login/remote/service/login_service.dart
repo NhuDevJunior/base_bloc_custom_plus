@@ -8,7 +8,7 @@ import '../../models/login_response.dart';
 
 part 'login_service.g.dart';
 
-@RestApi(baseUrl: "https://preview-sso.vtsmas.vn/")
+@RestApi(baseUrl: "https://sso.vtsmas.vn/")
 abstract class LoginService {
   factory LoginService(Dio dio) = _LoginService;
   // @FormUrlEncoded()

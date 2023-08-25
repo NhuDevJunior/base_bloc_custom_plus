@@ -4,6 +4,7 @@ import 'package:bloc_base_source/presentation/feature/home/remote/service/home_s
 import 'package:bloc_base_source/presentation/remote/dio_network.dart';
 import 'package:bloc_base_source/presentation/routers/app_router.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
 
@@ -16,7 +17,7 @@ final locator = GetIt.instance..allowReassignment = true;
 
 String token = "";
 String langApp = RequestHeaderValue.langVi;
-
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 @InjectableInit()
 Future<void> setupLocator() async {
   _init(locator);

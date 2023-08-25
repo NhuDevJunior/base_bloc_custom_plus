@@ -2,6 +2,7 @@ import 'package:bloc_base_source/core/bloc/event.dart';
 import 'package:bloc_base_source/core/common/error_type.dart';
 import 'package:bloc_base_source/helper/logger/logger.dart';
 import 'package:fimber/fimber.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../di/locator.dart';
@@ -10,7 +11,7 @@ import '../service/navigation_service.dart';
 import 'state.dart';
 
 abstract class BaseBloc extends Bloc<BaseEvent, BaseState> {
-  NavigationService get navigationService => locator<NavigationService>();
+  // NavigationService get navigationService => locator<NavigationService>();
 
   BaseBloc(BaseState state) : super(state) {
     on<BaseEvent>((event, emit) async {
@@ -95,7 +96,7 @@ abstract class BaseBloc extends Bloc<BaseEvent, BaseState> {
 
   void hideDialogState() {
     if (state is DialogState) {
-      navigationService.pop();
+      navigatorKey.currentState?.pop();
     }
   }
 }

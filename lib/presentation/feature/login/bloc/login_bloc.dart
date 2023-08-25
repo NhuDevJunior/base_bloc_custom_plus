@@ -1,4 +1,5 @@
 import 'package:bloc_base_source/helper/logger/logger.dart';
+import 'package:bloc_base_source/presentation/routers/app_path.dart';
 import 'package:bloc_base_source/presentation/routers/app_router.dart';
 import 'package:fimber/fimber.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -41,10 +42,7 @@ class LoginBloc extends BaseBloc {
           AppLog.d("login success data - ${data?.token_type}");
           hideDialogState();
           token = data?.token_type ?? "";
-          navigationService.pushAndRemoveUntil(
-            const HomeRoute(),
-            predicate: (route) => false,
-          );
+          navigatorKey.currentState?.pushReplacementNamed(AppPath.homeScreen);
         },
       );
     }

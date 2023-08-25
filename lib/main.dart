@@ -1,5 +1,6 @@
 import 'package:bloc_base_source/presentation/feature/login/view/login_screen.dart';
 import 'package:bloc_base_source/presentation/routers/app_router.dart';
+import 'package:bloc_base_source/presentation/routers/router_helper.dart';
 import 'package:flutter/material.dart';
 import 'di/locator.dart';
 import 'presentation/feature/home/view/home_screen.dart';
@@ -16,14 +17,18 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AppRouter _appRouter = locator<AppRouter>();
-    return MaterialApp.router(
+    return MaterialApp(
         title: 'Flutter Clean Architecture Sample',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        routerDelegate: _appRouter.delegate(),
-        routeInformationParser: _appRouter.defaultRouteParser());
+      home: const LoginScreen(),
+      navigatorKey: navigatorKey,
+      onGenerateRoute: (settings) {
+        return RouteHelper.getRoute(settings);
+      },
+    );
   }
   }
